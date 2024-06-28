@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: Tezos Delegation Operations Service
+  description: |-
+    Exposes Tezos delegation operations
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/
+tags:
+  - name: delegation
+    description: Tezos delegation operations
+paths:
+  /xtz/delegations:
+    get:
+      tags:
+        - delegation
+      summary: Get delegation operations
+      description: Get all delegation operations for a given year, ordered most recent first
+      parameters:
+        - name: year
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: Year to filter delegation operations. Must be in YYYY format.
+            example: 2024
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Delegation'
+        '400':
+          description: Bad query parameter value
+components:
+  schemas:
+    Delegation:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-06-27T13:27:33Z"
+        amount:
+          type: string
+          format: int64
+          example: "198772"
+        delegator:
+          type: string
+          example: "tz1a1SAaXRt9yoGMx29rh9FsBF4UzmvojdTL"
+        level:
+          type: string
+          format: int32
+          example: "2338084"
